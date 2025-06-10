@@ -3,14 +3,14 @@
 module bullet_rom(
   input wire clk,
   input wire video_on,
-  input wire [5:0] x, y,
+  input wire [9:0] x, y,
   output reg [11:0] color
 );
 
-wire [12:0] addr;
+wire [8:0] addr;
 wire [11:0] data;
 
-assign addr = {1'b0, y, x}; // 计算ROM地址
+assign addr = y*8+ x; // 计算ROM地址
 
 bull_rom bullet_rom_inst (
   .clka(clk),

@@ -194,12 +194,6 @@ module tank #(
 
         end
         
-        $monitor("Time=%0t, canfire: %b, bullet_fire: %b, fire_timer: %d",
-                        $time,
-                        can_fire,
-                        bullet_fire,
-                        fire_timer
-        );
     end
 
 endmodule

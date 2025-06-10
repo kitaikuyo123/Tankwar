@@ -16,7 +16,7 @@ module bullet_engine #(
 );
 
     reg [11:0] color_reg;
-    reg [6:0] rom_x, rom_y;
+    reg [9:0] rom_x, rom_y;
     wire [11:0] bullet_data;
 
     integer i;
@@ -26,8 +26,8 @@ module bullet_engine #(
     `define OBJ_ENABLE(data)     (data[28])
     `define OBJ_POS_X(data)      (data[27:18])
     `define OBJ_POS_Y(data)      (data[17:8])
-    `define SPRITE_ROW(data)     (data[7:5])
-    `define SPRITE_COL(data)     (data[4:2])
+    `define SPRITE_ROW(data)     (data[5:3])
+    `define SPRITE_COL(data)     (data[2:0])
 
     always @(posedge clk) begin
         if (video_on) begin
