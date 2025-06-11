@@ -23,7 +23,6 @@ module tank #(
     output reg [9:0] pos_x,       // 坦克X坐标
     output reg [9:0] pos_y,       // 坦克Y坐标
 
-    output reg [2:0] tank_addr = 0,    // OAM地址索引
     output reg [31:0] tank_state       // 坦克状态信息
 );
 

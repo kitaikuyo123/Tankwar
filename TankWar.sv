@@ -61,13 +61,11 @@ wire game_on = 1'b1;
 //--------------------------------------------------------------
 // 时钟分频 for VGA
 //--------------------------------------------------------------
-clk_wiz_0 clk_wiz_inst (
-    .clk_in1(clk), // 输入时钟
-    .clk_out1(clk_vga), // 输出VGA时钟
-    .reset(reset), // 复位信号
-    .locked() // 锁定信号
+clk_divider_4 clk_div (
+    .clk_in(clk),
+    .reset(reset),
+    .clk_out(clk_vga)
 );
-
 //--------------------------------------------------------------
 // VGA同步模块
 //--------------------------------------------------------------
@@ -145,37 +143,32 @@ game_engine game (
     .fire2(fire2),
 
     // RAM 输出连接
-    .tank_ram_addr(tank_ram_addr),
     .tank_ram_data(tank_ram_data),
 
-    .oppo_ram_addr(oppo_ram_addr),
     .oppo_ram_data(oppo_ram_data),
 
-    .bullet_ram_addr(bullet_ram_addr),
     .bullet_ram_data(bullet_ram_data)
 );
 
 //--------------------------------------------------------------
 // 对象引擎（坦�??1、坦�??2、子弹）
 //--------------------------------------------------------------
-tank_engine #(.TILE_WIDTH(32),.TILE_HEIGHT(32)) tank1 (
+tank_engine tank1 (
     .clk(clk),
     .video_on(video_on),
     .x(x),
     .y(y),
     .oam_data(tank_ram_data),
-    .oam_addr(),
     .sprite_on(tank1_pixel_on),
     .color(tank1_color)
 );
 
-tank_engine #(.TILE_WIDTH(32),.TILE_HEIGHT(32)) tank2 (
+tank_engine tank2 (
     .clk(clk),
     .video_on(video_on),
     .x(x),
     .y(y),
     .oam_data(oppo_ram_data),
-    .oam_addr(),
     .sprite_on(tank2_pixel_on),
     .color(tank2_color)
 );
@@ -186,7 +179,6 @@ bullet_engine #(.TILE_WIDTH(8),.TILE_HEIGHT(6)) bullet (
     .x(x),
     .y(y),
     .oam_data(bullet_ram_data),
-    .oam_addr(),
     .sprite_on(bullet_pixel_on),
     .color(bullet_color)
 );

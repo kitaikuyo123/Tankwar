@@ -21,13 +21,10 @@ module game_engine#(
     input wire right2,
     input wire fire2,       // 玩家开火
 
-    output reg [2:0] tank_ram_addr,
     output reg [31:0] tank_ram_data,
 
-    output reg [2:0] oppo_ram_addr,
     output reg [31:0] oppo_ram_data,
 
-    output reg [2:0] bullet_ram_addr [(MAX_BULLETS * 2)-1:0],
     output reg [31:0] bullet_ram_data [(MAX_BULLETS * 2)-1:0]
 );
 
@@ -47,11 +44,9 @@ wire oppo_bullet_fire;
 wire [1:0] oppo_bullet_dir;
 
 // 玩家子弹
-wire [2:0] bullet_player_addr [0:MAX_BULLETS-1];
 wire [31:0] bullet_player_state [0:MAX_BULLETS-1];
 
 // 敌人子弹
-wire [2:0] bullet_enemy_addr [0:MAX_BULLETS-1];
 wire [31:0] bullet_enemy_state [0:MAX_BULLETS-1];
 
 // 碰撞检测结果
@@ -77,7 +72,6 @@ tank #(.INIX(32), .INIY(32), .PLAYER_INDEX(0)) player (
     .pos_x(tank_x),
     .pos_y(tank_y),
 
-    .tank_addr(tank_ram_addr),
     .tank_state(tank_ram_data)
 );
 
@@ -99,7 +93,6 @@ tank  #(.INIX(64), .INIY(32), .PLAYER_INDEX(1)) enemy (
     .pos_x(oppo_x),
     .pos_y(oppo_y),
 
-    .tank_addr(oppo_ram_addr),
     .tank_state(oppo_ram_data)
 );
 
@@ -120,7 +113,6 @@ bullet player_bullets (
 
     .hit(hit_opponent),
 
-    .bullet_addr(bullet_player_addr),
     .bullet_state(bullet_player_state)
 );
 
@@ -141,18 +133,15 @@ bullet enemy_bullets (
 
     .hit(hit_player),
 
-    .bullet_addr(bullet_enemy_addr),
     .bullet_state(bullet_enemy_state)
 );
 
 generate
     genvar k;
     for (k = 0; k < MAX_BULLETS; k++) begin : map_player_bullets
-        assign bullet_ram_addr[k] = bullet_player_addr[k];
         assign bullet_ram_data[k] = bullet_player_state[k];
     end
     for (k = 0; k < MAX_BULLETS; k++) begin : map_enemy_bullets
-        assign bullet_ram_addr[k + MAX_BULLETS] = bullet_enemy_addr[k];
         assign bullet_ram_data[k + MAX_BULLETS] = bullet_enemy_state[k];
     end
 endgenerate

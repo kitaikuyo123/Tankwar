@@ -10,7 +10,6 @@ module bullet_engine #(
     input wire video_on,
     input wire [9:0] x, y,
     input wire [31:0] oam_data [15:0],
-    output reg [2:0] oam_addr,
     output wire sprite_on,
     output wire [11:0] color
 );
@@ -34,7 +33,6 @@ module bullet_engine #(
             display_flag <= 0;
 
             for (i = 0; i < OAM_DEPTH; i = i + 1) begin
-                oam_addr <= i; // 可选：按地址更新缓存
 
                 if (`OBJ_ENABLE(oam_data[i])) begin
                     if (x >= `OBJ_POS_X(oam_data[i]) &&

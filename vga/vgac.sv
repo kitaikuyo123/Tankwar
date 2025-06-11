@@ -55,6 +55,61 @@
 //     end
 // endmodule
 
+// module vgac (vga_clk,clrn,d_in,row_addr,col_addr,rdn,r,g,b,hs,vs); // vgac
+//    input     [11:0] d_in;     // bbbb_gggg_rrrr, pixel
+//    input            vga_clk;  // 25MHz
+//    input            clrn;
+//    output reg [8:0] row_addr; // pixel ram row address, 480 (512) lines
+//    output reg [9:0] col_addr; // pixel ram col address, 640 (1024) pixels
+//    output reg [3:0] r,g,b; // red, green, blue colors
+//    output reg       rdn;      // read pixel RAM (active_low)
+//    output reg       hs,vs;    // horizontal and vertical synchronization
+//    // h_count: VGA horizontal counter (0-799)
+//    reg [9:0] h_count; // VGA horizontal counter (0-799): pixels
+//    always @ (posedge vga_clk) begin
+//        if (!clrn) begin
+//            h_count <= 10'h0;
+//        end else if (h_count == 10'd799) begin
+//            h_count <= 10'h0;
+//        end else begin 
+//            h_count <= h_count + 10'h1;
+//        end
+//    end
+//    // v_count: VGA vertical counter (0-524)
+//    reg [9:0] v_count; // VGA vertical   counter (0-524): lines
+//    always @ (posedge vga_clk or negedge clrn) begin
+//        if (!clrn) begin
+//            v_count <= 10'h0;
+//        end else if (h_count == 10'd799) begin
+//            if (v_count == 10'd524) begin
+//                v_count <= 10'h0;
+//            end else begin
+//                v_count <= v_count + 10'h1;
+//            end
+//        end
+//    end
+//     // signals, will be latched for outputs
+//     wire  [9:0] row    =  v_count - 10'd35;     // pixel ram row addr 
+//     wire  [9:0] col    =  h_count - 10'd144;    // pixel ram col addr 
+//     wire        h_sync = (h_count > 10'd95);    //  96 -> 799
+//     wire        v_sync = (v_count > 10'd1);     //   2 -> 524
+//     wire        read   = (h_count > 10'd142) && // 143 -> 782
+//                          (h_count < 10'd783) && //        640 pixels
+//                          (v_count > 10'd34)  && //  35 -> 514
+//                          (v_count < 10'd515);   //        480 lines
+//     // vga signals
+//     always @ (posedge vga_clk) begin
+//         row_addr <=  row[8:0]; // pixel ram row address
+//         col_addr <=  col;      // pixel ram col address
+//         rdn      <= ~read;     // read pixel (active low)
+//         hs       <=  h_sync;   // horizontal synchronization
+//         vs       <=  v_sync;   // vertical   synchronization
+//         r        <=  rdn ? 4'h0 : d_in[3:0]; // 4-bit red
+//         g        <=  rdn ? 4'h0 : d_in[7:4]; // 4-bit green
+//         b        <=  rdn ? 4'h0 : d_in[11:8]; // 4-bit blue
+//     end
+// endmodule
+
 `timescale 1ns / 1ps
 
 module vgac(
@@ -82,6 +137,16 @@ module vgac(
     parameter V_FP    = 10'd10;   // 垂直前肩
     parameter V_SYNC  = 10'd2;    // 垂直同步脉冲
     parameter V_BP    = 10'd33;   // 垂直后肩
+    localparam H_FRONT = H_FP;
+    localparam H_SYNCW = H_SYNC;
+    localparam H_BACK  = H_BP;
+    parameter H_ACTIVE_START = H_FRONT + H_SYNCW + H_BACK;
+    parameter H_ACTIVE_END   = H_ACTIVE_START + H_DISP;
+    localparam V_FRONT = V_FP;
+    localparam V_SYNCW = V_SYNC;
+    localparam V_BACK  = V_BP;
+    localparam V_ACTIVE_START = V_FRONT + V_SYNCW + V_BACK;
+    localparam V_ACTIVE_END   = V_ACTIVE_START + V_DISP;
 
     // ====== 水平和垂直计数器 ======
     reg [9:0] h_count;
@@ -111,32 +176,30 @@ module vgac(
         end
     end
 
-    // ====== 地址计算 ======
-    assign col_addr = h_count - (H_FP + H_SYNC + H_BP);  // 起始于显示区左上角 x=0
-    assign row_addr = v_count - (V_FP + V_SYNC + V_BP);  // 起始于显示区左上角 y=0
-
-    // ====== 同步信号输出 ======
-    assign hs = (h_count < H_FP + H_SYNC) ? 1'b0 : 1'b1; // 水平同步低电平
-    assign vs = (v_count < V_FP + V_SYNC) ? 1'b0 : 1'b1; // 垂直同步低电平
+    // ====== 地址计算（带边界保护）======
+    assign col_addr = (h_count >= H_ACTIVE_START) ? h_count - H_ACTIVE_START : 10'h0;
+    assign row_addr = (v_count >= V_ACTIVE_START) ? v_count - V_ACTIVE_START : 10'h0;
 
     // ====== 视频有效区域判断 ======
-    wire in_display_area = (h_count >= (H_FP + H_SYNC + H_BP)) &&
-                           (h_count <  (H_FP + H_SYNC + H_BP + H_DISP)) &&
-                           (v_count >= (V_FP + V_SYNC + V_BP)) &&
-                           (v_count <  (V_FP + V_SYNC + V_BP + V_DISP));
+    wire in_display_area = 
+        (h_count >= H_ACTIVE_START) && (h_count < H_ACTIVE_END) &&
+        (v_count >= V_ACTIVE_START) && (v_count < V_ACTIVE_END);
+
     assign rdn = ~in_display_area;
 
     // ====== RGB 输出 ======
     always @(posedge vga_clk) begin
         if (in_display_area) begin
-            r <= d_in[3:0];
+            r <= d_in[11:8];
             g <= d_in[7:4];
-            b <= d_in[11:8];
+            b <= d_in[3:0];
         end else begin
             r <= 4'h0;
             g <= 4'h0;
             b <= 4'h0;
         end
+
+// $monitor("Time=%0t | hcount=%d vcount=%d", $time, h_count, v_count );
     $monitor("Time=%0t | hcount=%d vcount=%d",
             $time, h_count, v_count );
     end

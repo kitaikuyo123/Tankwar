@@ -18,11 +18,8 @@ module tb_tankwar_game();
     wire [3:0] vga_r, vga_g, vga_b;
 
     // 内部连接信号
-    wire [2:0] tank_ram_addr;
     wire [31:0] tank_ram_data;
-    wire [2:0] oppo_ram_addr;
     wire [31:0] oppo_ram_data;
-    wire [2:0] bullet_ram_addr [15:0];
     wire [31:0] bullet_ram_data [15:0];
 
     // ====== 实例化被测模块 ======
@@ -64,11 +61,8 @@ module tb_tankwar_game();
         .fire2(fire2),
 
         // RAM 接口
-        .tank_ram_addr(tank_ram_addr),
         .tank_ram_data(tank_ram_data),
-        .oppo_ram_addr(oppo_ram_addr),
         .oppo_ram_data(oppo_ram_data),
-        .bullet_ram_addr(bullet_ram_addr),
         .bullet_ram_data(bullet_ram_data)
     );
 
@@ -87,13 +81,12 @@ module tb_tankwar_game();
     // 坦克引擎
     wire tank1_pixel_on;
     wire [11:0] tank1_color;
-    tank_engine #(.TILE_WIDTH(32), .TILE_HEIGHT(32)) uut_tank1 (
+    tank_engine uut_tank1 (
         .clk(clk),
         .video_on(video_on),
         .x(x),
         .y(y),
         .oam_data(tank_ram_data),
-        .oam_addr(tank_ram_addr),
         .sprite_on(tank1_pixel_on),
         .color(tank1_color)
     );
@@ -101,13 +94,12 @@ module tb_tankwar_game();
     // 对手坦克
     wire tank2_pixel_on;
     wire [11:0] tank2_color;
-    tank_engine #(.TILE_WIDTH(32), .TILE_HEIGHT(32)) uut_tank2 (
+    tank_engine uut_tank2 (
         .clk(clk),
         .video_on(video_on),
         .x(x),
         .y(y),
         .oam_data(oppo_ram_data),
-        .oam_addr(oppo_ram_addr),
         .sprite_on(tank2_pixel_on),
         .color(tank2_color)
     );
@@ -121,7 +113,6 @@ module tb_tankwar_game();
         .x(x),
         .y(y),
         .oam_data(bullet_ram_data),
-        .oam_addr(),
         .sprite_on(bullet_pixel_on),
         .color(bullet_color)
     );

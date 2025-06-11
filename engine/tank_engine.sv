@@ -104,6 +104,7 @@ module tank_engine (
 
     reg [11:0] color_reg;
     reg [6:0] rom_x, rom_y;
+    reg in_range;
     wire [11:0] tank_data;
     wire [11:0] oppo_data;
 
@@ -115,7 +116,8 @@ module tank_engine (
         if (video_on && `OBJ_ENABLE) begin
             if (x >= `OBJ_POS_X && x < `OBJ_POS_X + 32 &&
                 y >= `OBJ_POS_Y && y < `OBJ_POS_Y + 32) begin
-
+                
+                in_range <= 1;
                 // 计算 ROM 地址
                 rom_x <= `SPRITE_COL * 32 + (x - `OBJ_POS_X);
                 rom_y <= `SPRITE_ROW * 32 + (y - `OBJ_POS_Y);
@@ -127,11 +129,14 @@ module tank_engine (
                     default: color_reg <= 12'h000;    // 默认黑色
                 endcase
             end
+            else begin
+                in_range <= 0;
+            end
         end
     end
 
     // 输出控制
-    assign sprite_on = (color_reg == 12'h00f || !`OBJ_ENABLE) ? 0 : 1;
+    assign sprite_on = (color_reg == 12'h00f || !`OBJ_ENABLE || !in_range) ? 0 : 1;
     assign color = color_reg;
 
 endmodule

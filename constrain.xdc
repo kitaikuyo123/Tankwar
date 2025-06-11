@@ -3,14 +3,16 @@
 # ---------------------
 set_property PACKAGE_PIN AC18 [get_ports clk]
 set_property IOSTANDARD LVCMOS18 [get_ports clk]
-create_clock -period 10.000 -name clk [get_ports "clk"]
+create_clock -period 9.9305 -name clk [get_ports "clk"]
 
 # ---------------------
 # 复位信号（使用 BTN_Y[0]）
 # ---------------------
-set_property PACKAGE_PIN V18 [get_ports reset]
+# set_property PACKAGE_PIN V18 [get_ports reset]
+# set_property IOSTANDARD LVCMOS18 [get_ports reset]
+# set_property PULLUP true [get_ports reset]
+set_property PACKAGE_PIN W13 [get_ports reset]
 set_property IOSTANDARD LVCMOS18 [get_ports reset]
-set_property PULLUP true [get_ports reset]
 
 # ---------------------
 # VGA 输出信号

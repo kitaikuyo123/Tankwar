@@ -15,7 +15,6 @@ module bullet #(
 
     output wire hit,                  // 是否击中敌人
 
-    output wire [2:0] bullet_addr [0:MAX_BULLETS-1], // OAM地址索引
     output wire [31:0] bullet_state [0:MAX_BULLETS-1] // 子弹状态信息
 );
 
@@ -71,7 +70,6 @@ assign hit = |collision; // 任意子弹击中敌人即为真
 generate
     genvar k;
     for (k = 0; k < MAX_BULLETS; k++) begin : bullet_outputs
-        assign bullet_addr[k] = k[2:0];
         assign bullet_state[k] = {
             1'b0,           // 补0 1
             2'b01,           // 对象类型：子弹
