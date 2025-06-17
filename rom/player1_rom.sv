@@ -10,7 +10,7 @@ module player1_rom(
 wire [12:0] addr;
 wire [11:0] data;
 
-assign addr = {1'b0, y, x}; // 计算ROM地址
+assign addr = y*32+x; // 计算ROM地址
 
 p1_rom player1_rom_inst (
   .clka(clk),

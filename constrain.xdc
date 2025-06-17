@@ -46,7 +46,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports {ps2_clk ps2_data}]
 # ��������
 # ---------------------
 
- 7-Segment Display
+#  7-Segment Display
  set_property PACKAGE_PIN AD21 [get_ports {AN[0]}]
  set_property PACKAGE_PIN AC21 [get_ports {AN[1]}]
  set_property PACKAGE_PIN AB21 [get_ports {AN[2]}]
@@ -63,7 +63,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports {ps2_clk ps2_data}]
  set_property PACKAGE_PIN AA22 [get_ports {SEGMENT[7]}]
  set_property IOSTANDARD LVCMOS33 [get_ports {SEGMENT[*]}]
 
- LED ����
+#  LED ����
  set_property PACKAGE_PIN N26 [get_ports ledclk]
  set_property PACKAGE_PIN N24 [get_ports ledclrn]
  set_property PACKAGE_PIN M26 [get_ports ledsout]
@@ -71,11 +71,11 @@ set_property IOSTANDARD LVCMOS33 [get_ports {ps2_clk ps2_data}]
  set_property IOSTANDARD LVCMOS33 [get_ports {ledclk ledclrn ledsout LEDEN}]
 
 # ����
-# set_property PACKAGE_PIN AA10 [get_ports {SW[0]}]
-# set_property PACKAGE_PIN AB10 [get_ports {SW[1]}]
-# ... �ɰ������� SW[2:15]
+set_property PACKAGE_PIN AA10 [get_ports {SW[0]}]
+set_property PACKAGE_PIN AB10 [get_ports {SW[1]}]
+... �ɰ������� SW[2:15]
 
- ����
+#  ����
  set_property PACKAGE_PIN V19 [get_ports {BTN_Y[1]}]
  set_property PACKAGE_PIN V14 [get_ports {BTN_Y[2]}]
  set_property PACKAGE_PIN W14 [get_ports {BTN_Y[3]}]

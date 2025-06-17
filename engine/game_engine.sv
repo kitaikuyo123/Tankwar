@@ -75,7 +75,7 @@ tank #(.INIX(32), .INIY(32), .PLAYER_INDEX(0)) player (
     .tank_state(tank_ram_data)
 );
 
-tank  #(.INIX(64), .INIY(32), .PLAYER_INDEX(1)) enemy (
+tank  #(.INIX(160), .INIY(32), .PLAYER_INDEX(1)) enemy (
     .clk(clk),
     .reset(reset),
     .killed(hit_opponent),
