@@ -1,8 +1,10 @@
 # ---------------------
 # ��ʱ�ӣ�100 MHz��
 # ---------------------
-
-set_property -dict {PACKAGE_PIN AC18  IOSTANDARD LVCMOS18} [get_ports {clk}];
+set_property PACKAGE_PIN AC18 [get_ports clk]
+set_property IOSTANDARD LVCMOS18 [get_ports clk]
+create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_ports clk]
+# set_property -dict {PACKAGE_PIN AC18  IOSTANDARD LVCMOS18} [get_ports {clk}];
 
 # ---------------------
 # ��λ�źţ�ʹ�� BTN_Y[0]��
@@ -10,14 +12,12 @@ set_property -dict {PACKAGE_PIN AC18  IOSTANDARD LVCMOS18} [get_ports {clk}];
 # set_property PACKAGE_PIN V18 [get_ports reset]
 # set_property IOSTANDARD LVCMOS18 [get_ports reset]
 # set_property PULLUP true [get_ports reset]
-set_property PACKAGE_PIN W13 [get_ports reset]
+set_property PACKAGE_PIN W19 [get_ports reset]
 set_property IOSTANDARD LVCMOS18 [get_ports reset]
 
 # ---------------------
 # VGA ����ź�
 # ---------------------
-
-
 ## VGA
 set_property -dict {PACKAGE_PIN T20   IOSTANDARD LVCMOS33 SLEW FAST} [get_ports {VGA_b[0]}];
 set_property -dict {PACKAGE_PIN R20   IOSTANDARD LVCMOS33 SLEW FAST} [get_ports {VGA_b[1]}];
@@ -42,9 +42,32 @@ set_property PACKAGE_PIN N18 [get_ports ps2_clk]
 set_property PACKAGE_PIN M19 [get_ports ps2_data]
 set_property IOSTANDARD LVCMOS33 [get_ports {ps2_clk ps2_data}]
 
+
+set_property PACKAGE_PIN AF24 [get_ports {ps2_up1}]
+set_property IOSTANDARD LVCMOS33 [get_ports {ps2_up1}]
+set_property PACKAGE_PIN AE21 [get_ports {ps2_down1}]
+set_property IOSTANDARD LVCMOS33 [get_ports {ps2_down1}]
+set_property PACKAGE_PIN Y22 [get_ports {ps2_left1}]
+set_property IOSTANDARD LVCMOS33 [get_ports {ps2_left1}]
+set_property PACKAGE_PIN Y23 [get_ports {ps2_right1}]
+set_property IOSTANDARD LVCMOS33 [get_ports {ps2_right1}]
+
+set_property PACKAGE_PIN AA23 [get_ports {ps2_up2}]
+set_property IOSTANDARD LVCMOS33 [get_ports {ps2_up2}]
+set_property PACKAGE_PIN Y25 [get_ports {ps2_down2}]
+set_property IOSTANDARD LVCMOS33 [get_ports {ps2_down2}]
+set_property PACKAGE_PIN AB25 [get_ports {ps2_left2}]
+set_property IOSTANDARD LVCMOS33 [get_ports {ps2_left2}]
+set_property PACKAGE_PIN W23 [get_ports {ps2_right2}]
+set_property IOSTANDARD LVCMOS33 [get_ports {ps2_right2}]
+
 # ---------------------
 # ��������
 # ---------------------
+# buzzer
+set_property PACKAGE_PIN AF25 [get_ports voice]
+set_property IOSTANDARD LVCMOS33 [get_ports voice]
+
 
 #  7-Segment Display
  set_property PACKAGE_PIN AD21 [get_ports {AN[0]}]

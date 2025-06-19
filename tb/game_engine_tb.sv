@@ -53,13 +53,10 @@ module tb_game_engine#(
         .right2(right2),
         .fire2(fire2),
 
-        .tank_ram_addr(tank_ram_addr),
         .tank_ram_data(tank_ram_data),
 
-        .oppo_ram_addr(oppo_ram_addr),
         .oppo_ram_data(oppo_ram_data),
 
-        .bullet_ram_addr(bullet_ram_addr),
         .bullet_ram_data(bullet_ram_data)
     );
 

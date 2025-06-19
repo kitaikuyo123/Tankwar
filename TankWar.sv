@@ -13,7 +13,17 @@ module tankWar_top (
     // VGA控制
     output wire hsync,
     output wire vsync,
-    output wire [3:0] VGA_r,VGA_g,VGA_b
+    output wire [3:0] VGA_r,VGA_g,VGA_b,
+    // 音频输出
+    output wire voice,
+    output reg ps2_up1,
+    output reg ps2_down1,
+    output reg ps2_left1,
+    output reg ps2_right1,
+    output reg ps2_up2,
+    output reg ps2_down2,
+    output reg ps2_left2,
+    output reg ps2_right2
 );
 
 //--------------------------------------------------------------
@@ -58,6 +68,8 @@ wire left2;
 wire right2;
 wire fire2;
 
+wire beep; // 音频输出
+
 wire game_on = 1'b1;
 
 //--------------------------------------------------------------
@@ -73,7 +85,11 @@ end
 //--------------------------------------------------------------
 wire [15:0] SW_OK;
 AntiJitter #(4) a0[15:0](.clk(clkdiv[15]), .I(SW), .O(SW_OK));
-
+//--------------------------------------------------------------
+// 音乐
+//--------------------------------------------------------------
+music audio_unit(.clk(clkdiv[0]), .speaker(beep));
+assign voice = beep & SW_OK[2];
 
 //--------------------------------------------------------------
 // VGA同步模块
@@ -102,7 +118,7 @@ vgac VGA(
 //--------------------------------------------------------------
 PS2 ps2 (
     .clk(clk), 
-    .rst(reset), 
+    .rst(SW_OK[1]), 
     .ps2_clk(ps2_clk), 
     .ps2_data(ps2_data), 
     .up(up1),
@@ -133,7 +149,7 @@ background_engine background (
 // 游戏引擎
 //--------------------------------------------------------------
 game_engine game (
-    .clk(clk),
+    .clk(clkdiv[5]),
     .reset(reset),
     .video_on(video_on),
     .game_on(game_on),
@@ -210,6 +226,17 @@ always_comb begin
     end else begin
         rgb = 12'h000;
     end
+end
+
+always @(posedge clk) begin
+    ps2_up1 <= up1;  
+    ps2_left1 <= left1; 
+    ps2_right1 <= right1; 
+    ps2_down1 <= down1; 
+    ps2_up2 <= up2;  
+    ps2_left2 <= left2; 
+    ps2_right2 <= right2; 
+    ps2_down2 <= down2; 
 end
 
 endmodule

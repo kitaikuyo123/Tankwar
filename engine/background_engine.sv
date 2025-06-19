@@ -43,8 +43,8 @@ module background_engine(
     bg_rom bg_rom(.clk(clk), .video_on(video_on), .x(rom_x), .y(rom_y), .color(rom_data));
 
     always @ (posedge clk) begin 
-      $monitor("x: %d, y: %d, map_x: %d, map_y: %d, rom_x: %d, rom_y: %d, rom_data: %h, isWall: %b, isRoad: %b, pixel_on: %b, color: %h", 
-               x, y, map_x, map_y, rom_x, rom_y, rom_data, map[map_x][map_y] == 1, map[map_x][map_y] == 0, pixel_on, color);
+      // $monitor("x: %d, y: %d, map_x: %d, map_y: %d, rom_x: %d, rom_y: %d, rom_data: %h, isWall: %b, isRoad: %b, pixel_on: %b, color: %h", 
+      //          x, y, map_x, map_y, rom_x, rom_y, rom_data, map[map_x][map_y] == 1, map[map_x][map_y] == 0, pixel_on, color);
       if(map[map_x][map_y] == 1) begin
         rom_x = WALL_COL * TILE_WIDTH + x[4:0];
         rom_y = WALL_ROW * TILE_HEIGHT + y[4:0];
