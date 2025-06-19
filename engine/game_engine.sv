@@ -31,7 +31,7 @@ module game_engine#(
 parameter TANK_SIZE = 32;      // 坦克大小（像素）
 parameter BULLET_SIZE = 8;     // 子弹大小（像素）
 
-reg game_over = 0;
+logic game_over = 0;
 
 // 玩家坦克
 wire [9:0] tank_x, tank_y;
@@ -58,7 +58,7 @@ tank #(.INIX(32), .INIY(32), .PLAYER_INDEX(0)) player (
     .clk(clk),
     .reset(reset),
     .killed(hit_player),
-    .game_over(game_over),
+    .game_over(0),
 
     .up(up1),
     .down(down1),
@@ -79,7 +79,7 @@ tank  #(.INIX(160), .INIY(32), .PLAYER_INDEX(1)) enemy (
     .clk(clk),
     .reset(reset),
     .killed(hit_opponent),
-    .game_over(game_over),
+    .game_over(0),
 
     .up(up2),
     .down(down2),

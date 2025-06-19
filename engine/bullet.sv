@@ -137,10 +137,10 @@ always @(posedge clk) begin
                         move_counter[i] <= 0;
 
                         case (dir_reg[i])
-                            2'b00: bullet_y_reg[i] <= bullet_y_reg[i] - 32; // 上
-                            2'b01: bullet_y_reg[i] <= bullet_y_reg[i] + 32; // 下
-                            2'b10: bullet_x_reg[i] <= bullet_x_reg[i] - 32; // 左
-                            2'b11: bullet_x_reg[i] <= bullet_x_reg[i] + 32; // 右
+                            2'b00: bullet_y_reg[i] <= bullet_y_reg[i] - 1; // 上
+                            2'b01: bullet_y_reg[i] <= bullet_y_reg[i] + 1; // 下
+                            2'b10: bullet_x_reg[i] <= bullet_x_reg[i] - 1; // 左
+                            2'b11: bullet_x_reg[i] <= bullet_x_reg[i] + 1; // 右
                         endcase
                     end else begin
                         move_counter[i] <= move_counter[i] + 1;

@@ -4,7 +4,7 @@ module tankWar_top (
     input wire clk,
     input wire reset,
 
-    input [15:0]SW,
+    input [14:0]SW,
 
     // 控制输入
     input ps2_clk,
@@ -83,8 +83,8 @@ end
 //--------------------------------------------------------------
 // 去抖动
 //--------------------------------------------------------------
-wire [15:0] SW_OK;
-AntiJitter #(4) a0[15:0](.clk(clkdiv[15]), .I(SW), .O(SW_OK));
+wire [14:0] SW_OK;
+AntiJitter #(4) a0[14:0](.clk(clkdiv[15]), .I(SW), .O(SW_OK));
 //--------------------------------------------------------------
 // 音乐
 //--------------------------------------------------------------
@@ -149,7 +149,7 @@ background_engine background (
 // 游戏引擎
 //--------------------------------------------------------------
 game_engine game (
-    .clk(clkdiv[5]),
+    .clk(clk),
     .reset(reset),
     .video_on(video_on),
     .game_on(game_on),
@@ -159,7 +159,7 @@ game_engine game (
     .down1(down1),
     .left1(left1),
     .right1(right1),
-    .fire1(fire1),
+    .fire1(fire1h),
 
     // 玩家2输入
     .up2(up2),
@@ -233,7 +233,7 @@ always @(posedge clk) begin
     ps2_left1 <= left1; 
     ps2_right1 <= right1; 
     ps2_down1 <= down1; 
-    ps2_up2 <= up2;  
+    ps2_up2 <= up2;   
     ps2_left2 <= left2; 
     ps2_right2 <= right2; 
     ps2_down2 <= down2; 

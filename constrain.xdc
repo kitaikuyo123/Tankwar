@@ -12,8 +12,8 @@ create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_
 # set_property PACKAGE_PIN V18 [get_ports reset]
 # set_property IOSTANDARD LVCMOS18 [get_ports reset]
 # set_property PULLUP true [get_ports reset]
-set_property PACKAGE_PIN W19 [get_ports reset]
-set_property IOSTANDARD LVCMOS18 [get_ports reset]
+set_property PACKAGE_PIN AF10 [get_ports reset]
+set_property IOSTANDARD LVCMOS15 [get_ports reset]
 
 # ---------------------
 # VGA ����ź�
