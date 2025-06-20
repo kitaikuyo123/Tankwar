@@ -93,11 +93,6 @@ set_property IOSTANDARD LVCMOS33 [get_ports voice]
  set_property PACKAGE_PIN P18 [get_ports LEDEN]
  set_property IOSTANDARD LVCMOS33 [get_ports {ledclk ledclrn ledsout LEDEN}]
 
-# ����
-set_property PACKAGE_PIN AA10 [get_ports {SW[0]}]
-set_property PACKAGE_PIN AB10 [get_ports {SW[1]}]
-... �ɰ������� SW[2:15]
-
 #  ����
  set_property PACKAGE_PIN V19 [get_ports {BTN_Y[1]}]
  set_property PACKAGE_PIN V14 [get_ports {BTN_Y[2]}]

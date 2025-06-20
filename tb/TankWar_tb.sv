@@ -151,9 +151,9 @@ module tb_tankwar_game();
         up1 = 0; down1 = 0; left1 = 0; right1 = 0; fire1 = 0;
         up2 = 0; down2 = 0; left2 = 0; right2 = 0; fire2 = 0;
 
-        #1000;
-        // right1 = 1; #100; right1 = 0; // 向右移动
-        // fire1 = 1; #10; fire1 = 0;    // 开火
+        #10000000;
+        right1 = 1; #100; right1 = 0; // 向右移动
+        fire1 = 1; #10; fire1 = 0;    // 开火
         #500;
         // up2 = 1; #100; up2 = 0;      // 敌方坦克向上
         // fire2 = 1; #10; fire2 = 0;   // 敌方开火

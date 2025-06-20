@@ -16,6 +16,7 @@ module tankWar_top (
     output wire [3:0] VGA_r,VGA_g,VGA_b,
     // 音频输出
     output wire voice,
+
     output reg ps2_up1,
     output reg ps2_down1,
     output reg ps2_left1,
@@ -38,13 +39,10 @@ wire video_on;         // 视频是否在有效区�???
 wire f_tick;           // 帧同步信�???
 wire [9:0] x, y;       // 当前像素坐标
 
-wire [2:0] tank_ram_addr;
 wire [31:0] tank_ram_data;
 
-wire [2:0] oppo_ram_addr;
 wire [31:0] oppo_ram_data;
 
-wire [2:0] bullet_ram_addr [(MAX_BULLETS * 2)-1:0];
 wire [31:0] bullet_ram_data [(MAX_BULLETS * 2)-1:0];
 
 wire bg_pixel_on;
@@ -159,7 +157,7 @@ game_engine game (
     .down1(down1),
     .left1(left1),
     .right1(right1),
-    .fire1(fire1h),
+    .fire1(fire1),
 
     // 玩家2输入
     .up2(up2),
@@ -199,7 +197,7 @@ tank_engine tank2 (
     .color(tank2_color)
 );
 
-bullet_engine #(.TILE_WIDTH(8),.TILE_HEIGHT(6)) bullet (
+bullet_engine #(.TILE_WIDTH(8),.TILE_HEIGHT(8)) bullet (
     .clk(clk),
     .video_on(video_on),
     .x(x),
@@ -215,12 +213,12 @@ bullet_engine #(.TILE_WIDTH(8),.TILE_HEIGHT(6)) bullet (
 always_comb begin
     if (!video_on) begin
         rgb = 12'h000; // 黑屏
+    end else if (bullet_pixel_on) begin
+        rgb = bullet_color;
     end else if (tank1_pixel_on) begin
         rgb = tank1_color;
     end else if (tank2_pixel_on) begin
         rgb = tank2_color;
-    end else if (bullet_pixel_on) begin
-        rgb = bullet_color;
     end else if (bg_pixel_on) begin
         rgb = bg_color;
     end else begin
@@ -229,14 +227,14 @@ always_comb begin
 end
 
 always @(posedge clk) begin
-    ps2_up1 <= up1;  
-    ps2_left1 <= left1; 
-    ps2_right1 <= right1; 
-    ps2_down1 <= down1; 
-    ps2_up2 <= up2;   
-    ps2_left2 <= left2; 
-    ps2_right2 <= right2; 
-    ps2_down2 <= down2; 
+    ps2_up1 <= fire1;  
+    ps2_left1 <= fire1; 
+    ps2_right1 <= fire1; 
+    ps2_down1 <= fire1; 
+    ps2_up2 <= fire2;   
+    ps2_left2 <= fire2; 
+    ps2_right2 <= fire2; 
+    ps2_down2 <= fire2; 
 end
 
 endmodule

@@ -58,7 +58,7 @@ tank #(.INIX(32), .INIY(32), .PLAYER_INDEX(0)) player (
     .clk(clk),
     .reset(reset),
     .killed(hit_player),
-    .game_over(0),
+    .game_over(game_over),
 
     .up(up1),
     .down(down1),
@@ -79,7 +79,7 @@ tank  #(.INIX(160), .INIY(32), .PLAYER_INDEX(1)) enemy (
     .clk(clk),
     .reset(reset),
     .killed(hit_opponent),
-    .game_over(0),
+    .game_over(game_over),
 
     .up(up2),
     .down(down2),
@@ -102,7 +102,7 @@ bullet player_bullets (
     .reset(reset),
     .game_over(game_over),
 
-    .fire(tank_bullet_fire),
+    .fire(fire1),
     .bullet_direction(tank_bullet_dir),
 
     .init_x(tank_x),
@@ -122,7 +122,7 @@ bullet enemy_bullets (
     .reset(reset),
     .game_over(game_over),
 
-    .fire(oppo_bullet_fire),
+    .fire(fire2),
     .bullet_direction(oppo_bullet_dir),
 
     .init_x(oppo_x),

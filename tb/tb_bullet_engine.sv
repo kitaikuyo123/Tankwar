@@ -23,7 +23,6 @@ module bullet_engine_tb;
         .x(x),
         .y(y),
         .oam_data(oam_data),
-        .oam_addr(oam_addr),
         .sprite_on(sprite_on),
         .color(color)
     );

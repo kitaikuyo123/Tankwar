@@ -111,7 +111,7 @@ module tb_game_engine#(
 
         // 玩家开火
         fire1 = 1;
-        #100;
+        #1000;
         fire1 = 0;
 
         // // 移动敌人坦克

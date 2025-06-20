@@ -17,7 +17,7 @@ module tank #(
     input wire right,
     input wire fire,
 
-    output reg bullet_fire = 0,        // 子弹发射信号
+    output reg bullet_fire,        // 子弹发射信号
     output reg [1:0] bullet_direction, // 子弹方向（与坦克一致）
 
     output reg [9:0] pos_x,       // 坦克X坐标
@@ -37,6 +37,7 @@ module tank #(
     reg active = 1'b1;                 // 坦克是否存活
     reg [9:0] pos_x_next, pos_y_next;
     reg [1:0] tank_dir_next;
+    reg [1:0] bullet_direction_next;   // 下一个子弹方向
     reg bullet_fire_next;              // 下一个子弹发射状态
     reg [19:0] move_time_reg, move_time_next; // 移动时间计数器
     reg [19:0] fire_time_reg, fire_time_next; // 移动时间计数器
@@ -89,6 +90,8 @@ module tank #(
             fire_time_reg = 0;
             rom_col <= 3'b000;
             rom_row <= 3'b000;
+            bullet_fire <= 1'b0;
+            bullet_direction <= 2'b00;
 
         end else begin
             pos_x <= pos_x_next;
@@ -100,12 +103,14 @@ module tank #(
             move_time_reg <= move_time_next;
             fire_time_reg <= fire_time_next;
 
-            rom_col <= rom_col_next;
+            rom_col <= rom_col_next;   
             rom_row <= rom_row_next;
 
             if (killed)
                 active <= 1'b0;
         end
+        // $monitor("Time=%0t | Bullet Fire: %b | fire_time_reg: %d",
+        //          $time, bullet_fire, fire_time_reg);
     end
 
     always_comb begin
@@ -113,16 +118,28 @@ module tank #(
         pos_y_next = pos_y;
         tank_dir_next = tank_dir;
         bullet_fire_next = bullet_fire;
+        bullet_direction_next = bullet_direction;
         move_time_next = move_time_reg;
         fire_time_next = fire_time_reg;
         rom_col_next = rom_col;
         rom_row_next = rom_row;
 
+        // if (fire) begin
+        //     bullet_direction_next = tank_dir;
+        //     if (fire_time_reg > 0) begin
+        //         fire_time_next = fire_time_reg - 1;
+        //     end else if (fire_time_reg == 0) begin
+        //         bullet_fire_next = 1'b1;
+        //         fire_time_next = FIRE_TIME;
+        //     end
+        // end else begin
+        //     bullet_fire_next = 1'b0;
+        // end
+
         if (left) begin
             tank_dir_next = 2'b00;
             rom_row_next = 3'b000;
             rom_col_next = 3'b000;
-
             if(move_time_reg > 0) begin
                 move_time_next = move_time_reg - 1;
             end else if (move_time_reg == 0) begin
@@ -137,8 +154,8 @@ module tank #(
             end
         end else if (right) begin
             tank_dir_next = 2'b01;
-            rom_row_next = 3'b000;
-            rom_col_next = 3'b001;
+            rom_row_next = 3'b001;
+            rom_col_next = 3'b000;
             if (move_time_reg > 0) begin
                 move_time_next = move_time_reg - 1;
             end else if (move_time_reg == 0) begin
@@ -153,8 +170,8 @@ module tank #(
             end
         end else if (up) begin
             tank_dir_next = 2'b10;
-            rom_row_next = 3'b000;
-            rom_col_next = 3'b010;
+            rom_row_next = 3'b010;
+            rom_col_next = 3'b000;
             if (move_time_reg > 0) begin
                 move_time_next = move_time_reg - 1;
             end else if (move_time_reg == 0) begin
@@ -169,8 +186,8 @@ module tank #(
             end
         end else if (down) begin
             tank_dir_next = 2'b11;
-            rom_row_next = 3'b000;
-            rom_col_next = 3'b011;
+            rom_row_next = 3'b011;
+            rom_col_next = 3'b000;
             if (move_time_reg > 0) begin
                 move_time_next = move_time_reg - 1; 
             end else if (move_time_reg == 0) begin
@@ -183,10 +200,6 @@ module tank #(
                     move_time_next = MOVE_TIME;
                 end
             end
-        end
-        else begin
-            move_time_next = MOVE_TIME;
-            fire_time_next = FIRE_TIME;
         end
     end        
 

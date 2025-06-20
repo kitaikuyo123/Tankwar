@@ -121,12 +121,12 @@ module tb_tankwar_game();
     always_comb begin
         if (!video_on) begin
             rgb = 12'h000; // 黑屏
+        end else if (bullet_pixel_on) begin
+            rgb = bullet_color;
         end else if (tank1_pixel_on) begin
             rgb = tank1_color;
         end else if (tank2_pixel_on) begin
             rgb = tank2_color;
-        end else if (bullet_pixel_on) begin
-            rgb = bullet_color;
         end else if (bg_pixel_on) begin
             rgb = bg_color;
         end else begin
@@ -151,13 +151,23 @@ module tb_tankwar_game();
         up1 = 0; down1 = 0; left1 = 0; right1 = 0; fire1 = 0;
         up2 = 0; down2 = 0; left2 = 0; right2 = 0; fire2 = 0;
 
-        #1000;
-        // right1 = 1; #100; right1 = 0; // 向右移动
-        // fire1 = 1; #10; fire1 = 0;    // 开火
+        down1 = 1; #60; down1 = 0; // 向右移动
+        #100
+        fire1 = 1; #100; fire1 = 0;    // 开火
         #500;
-        // up2 = 1; #100; up2 = 0;      // 敌方坦克向上
-        // fire2 = 1; #10; fire2 = 0;   // 敌方开火
-        #200000 $finish;
+
+        // down1 = 1;
+        // #60;
+        // down1 = 0;
+        // up1=1;
+        // #10;
+        // up1=0;
+
+        // // 玩家开火
+        // fire1 = 1;
+        // #100;
+        // fire1 = 0;
+
     end
 
     // ====== 波形记录 ======
@@ -168,8 +178,13 @@ module tb_tankwar_game();
 
     // ====== 信号监视 ======
     initial begin
-        $monitor("Time=%0t | x=%0d y=%0d | video_on=%b | color=%h",
-                 $time, x, y, video_on, rgb);
+    $monitor("Time=%0t | bullet_ram_data=%h",
+             $time, bullet_ram_data[0]);
+        
     end
+    // initial begin
+    //     $monitor("Time=%0t | x=%0d y=%0d | video_on=%b | tank1_pixel_on=%b | tank2_pixel_on=%b | bullet_pixel_on=%b | bg_pixel_on=%b | rgb=%b",
+    //              $time, x, y, video_on, tank1_pixel_on, tank2_pixel_on, bullet_pixel_on, bg_pixel_on, rgb);
+    // end
 
 endmodule
